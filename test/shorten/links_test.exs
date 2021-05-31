@@ -6,61 +6,41 @@ defmodule Shorten.LinksTest do
   describe "links" do
     alias Shorten.Links.Link
 
-    @valid_attrs %{slug: "some slug", url: "some url"}
-    @update_attrs %{slug: "some updated slug", url: "some updated url"}
-    @invalid_attrs %{slug: nil, url: nil}
+    @valid_attrs %{"url" => "https://www.stord.com/"}
+    @invalid_attrs %{"url" => "some url"}
 
     def link_fixture(attrs \\ %{}) do
       {:ok, link} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Links.create_link()
-
+        |> Links.find_or_create()
       link
     end
 
-    test "list_links/0 returns all links" do
+    test "find_or_create returns a new link" do
+      assert {:ok, %Link{} = link} = Links.find_or_create(@valid_attrs)
+      assert String.length(link.slug) == 8
+      assert link.url == @valid_attrs["url"]
+    end
+
+    test "find_or_create returns an existing link" do
+      original_link = link_fixture()
+      {:ok, %Link{} = link} = Links.find_or_create(@valid_attrs)
+      assert original_link == link
+    end
+
+    test "find_by_slug returns a link by slug" do
       link = link_fixture()
-      assert Links.list_links() == [link]
+      assert Links.find_by_slug(link.slug).id == link.id
     end
 
-    test "get_link!/1 returns the link with given id" do
+    test "find_by_url returns a link by url" do
       link = link_fixture()
-      assert Links.get_link!(link.id) == link
+      assert Links.find_by_url(link.url) == link
     end
 
-    test "create_link/1 with valid data creates a link" do
-      assert {:ok, %Link{} = link} = Links.create_link(@valid_attrs)
-      assert link.slug == "some slug"
-      assert link.url == "some url"
-    end
-
-    test "create_link/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Links.create_link(@invalid_attrs)
-    end
-
-    test "update_link/2 with valid data updates the link" do
-      link = link_fixture()
-      assert {:ok, %Link{} = link} = Links.update_link(link, @update_attrs)
-      assert link.slug == "some updated slug"
-      assert link.url == "some updated url"
-    end
-
-    test "update_link/2 with invalid data returns error changeset" do
-      link = link_fixture()
-      assert {:error, %Ecto.Changeset{}} = Links.update_link(link, @invalid_attrs)
-      assert link == Links.get_link!(link.id)
-    end
-
-    test "delete_link/1 deletes the link" do
-      link = link_fixture()
-      assert {:ok, %Link{}} = Links.delete_link(link)
-      assert_raise Ecto.NoResultsError, fn -> Links.get_link!(link.id) end
-    end
-
-    test "change_link/1 returns a link changeset" do
-      link = link_fixture()
-      assert %Ecto.Changeset{} = Links.change_link(link)
+    test "find_or_create with invalid url returns error changeset" do
+        assert {:error, _} = Links.find_or_create(@invalid_attrs)
     end
   end
 end

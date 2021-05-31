@@ -9,6 +9,10 @@ defmodule ShortenWeb.PageController do
 
   def link_redirect(conn, %{"slug" => slug}) do
     link = Links.find_by_slug(slug)
-    redirect(conn, external: link.url)
+    if link do
+      redirect(conn, external: link.url)
+    else
+      render(conn, ShortenWeb.ErrorView, "404.html")
+    end
   end
 end
