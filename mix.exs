@@ -45,7 +45,8 @@ defmodule Shorten.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:react_phoenix, "~> 1.2"}
+      {:react_phoenix, "~> 1.2"},
+      {:ecto_fields, "~> 1.3.0"}
     ]
   end
 

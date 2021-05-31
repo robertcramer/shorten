@@ -17,12 +17,15 @@ defmodule ShortenWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/:slug", PageController, :link_redirect
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", ShortenWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", ShortenWeb.Api do
+    pipe_through :api
+
+    resources "/links", LinkController, only: [:create]
+  end
 
   # Enables LiveDashboard only for development
   #
