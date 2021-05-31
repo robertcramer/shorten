@@ -15,6 +15,8 @@ import "../css/app.scss"
 import "phoenix_html"
 import "react-phoenix"
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import Shortener from './components/Shortener'
 window.Components = {
   Shortener

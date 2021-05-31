@@ -5,7 +5,7 @@ defmodule Shorten.Links do
   alias Shorten.Links.Link
 
   def find_or_create(attrs) do
-    link = find_by_url(attrs.url)
+    link = find_by_url(attrs["url"])
     if is_nil(link) do
       %Link{}
       |> Link.changeset(attrs)

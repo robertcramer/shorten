@@ -11,8 +11,7 @@ defmodule ShortenWeb.Api.LinkController do
     with {:ok, %Link{} = link} <- Links.find_or_create(link_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.link_path(conn, :show, link))
-      |> render("show.json", link: link)
+      |> render("show.json", link: ShortenWeb.Router.Helpers.url(conn) <> "/" <> link.slug)
     end
   end
 end
