@@ -1,0 +1,4 @@
+1. Install backend dependencies - mix deps.get
+2. Create database and run migrations - mix ecto.setup
+3. Install frontend dependencies - cd into assets directory and run 'npm install'
+4. Start server - mix phx.server from root project directory
